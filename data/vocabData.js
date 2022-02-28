@@ -1,9 +1,34 @@
 const vocab = [
     {
-        word : 'Apple',
-        wordTranslation: 'リンゴ',
-        exampleSentence: 'I ate a big red apple.',
-        exampleSentenceTranslation: '大きな赤いリンゴを食べた'
+        key: '',
+        word: '',
+        wordProperties: {
+            pos: '',
+
+        },
+
+        tags: [],
+        audio: {
+            audioUs: '',
+            audioUk: '',
+            audioAus: '',
+        },
+        enExample: {
+            exampSent1: '',
+            exampSent2: '',
+            exampSent3: '',
+        },
+        jpExample: {
+            exampSent1: '',
+            exampSent2: '',
+            exampSent3: '',
+        },
+        testData: {
+            IELTS: '',
+            TOEIC: '',
+            TOEFL: '',
+            EIKEN: '',
+        },
     },
 ]
 

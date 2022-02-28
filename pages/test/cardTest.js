@@ -9,8 +9,6 @@ import { Box } from '@chakra-ui/react'
 
 const CardTest = () => {
 
-    const MotionBox = motion(Box)
-
     const cardContent = {
         front: 'I am front',
         back: 'I am back'
@@ -19,7 +17,7 @@ const CardTest = () => {
     return (
         <>
             <Container>
-                <VocabCard content={cardContent.front} />
+                <VocabCard content={cardContent} />
             </Container>
         </>
     );
