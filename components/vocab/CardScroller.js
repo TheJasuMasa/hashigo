@@ -13,7 +13,7 @@ import { ArrowForwardIcon, ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/
 const CardScroller = () => {
 
     const cardList = [
-        { id: 1, content: { front: 'Hello there', back: 'Hello there back' } },
+        { id: 1, content: { front: 'Hello there', back: 'Hello there back' }, something: 'value' },
         { id: 2, content: { front: 'I am a card', back: 'I am the back of a card' } },
         { id: 3, content: { front: 'And this is a card scroller', back: 'this is what a card sroller looks like when you flip' } },
         { id: 4, content: { front: 'This is the last card', back: 'This is the back of the last card' } },

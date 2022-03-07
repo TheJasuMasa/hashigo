@@ -7,7 +7,7 @@ import { RepeatIcon } from '@chakra-ui/icons'
 import VocabCardFront from '../../components/vocab/VocabCardFront'
 import VocabCardBack from '../../components/vocab/VocabCardBack'
 
-import { animate, motion, useAnimation, AnimatePresence } from 'framer-motion'
+import { motion, useAnimation, AnimatePresence, AnimateSharedLayout } from 'framer-motion'
 
 import useSound from 'use-sound'
 
@@ -31,67 +31,89 @@ const VocabCard = ({ content }) => {
 
     const MotionFlex = motion(Flex)
 
-    const flipVariants = {
-        doNothing: {},
-        rotateLeft: {
-            rotateY: [0, 90, 45, 0],
-            duration: .5,
+    const variants = {
+        rotateLeftFirst: {
+            rotateY: [0, 90],
             scale: [1, 1.1, 1],
+            translateX: [-50, 0, 50],
+            transition: {
+                duration: .25
+            }
+        },
+        rotateLeftSecond: {
+            rotateY: [45, 0],
+            scale: [1, 1.1, 1],
+            transition: {
+                duration: .25
+            }
         },
         rotateRight: {
             rotateY: [0, -90, -45, 0],
-            duration: .5,
             scale: [1, 1.1, 1],
+            transition: {
+                duration: .5
+            }
         }
     }
 
-    const animation = useAnimation()
+    const control = useAnimation()
 
     // End Animation Stuff//
 
     //State Stuff//
 
-    const [isFlipped, setIsFlipped] = useState(false)
-    const [isFirstFlip, setIsFirstFlip] = useState(true)
+    const [isFront, setIsFront] = useState('initial')
     const [showFlip, setShowFlip] = useState(false)
 
-    const flipCard = () => {
-        setIsFlipped(!isFlipped)
-        setIsFirstFlip(false)
+    const flipCard = async () => {
+        if (isFront === 'inital') {
+            await control.start(variants.rotateLeftFirst)
+            setIsFront(false)
+            await control.start(variants.rotateLeftSecond)
+        } else if (isFront) {
+            await control.start(variants.rotateRight)
+            console.log('flipping right')
+            setIsFront(!isFront)
+        } else {
+            await control.start(variants.rotateRight)
+            console.log('flipping left')
+            setIsFront(!isFront)
+        }
     }
 
     const cardFlipHandler = () => {
         flipCard()
-        play()
-        setRandomSound()
+        console.log('Flipping card')
+        // play()
+        // setRandomSound()
     }
 
     useEffect(() => {
-        if (isFirstFlip) {
-            console.log('not Animating')
-        }
-        if (isFlipped) {
-            animation.start(flipVariants.rotateRight)
-            console.log('animating rotate Right')
-        }
-        if (!isFlipped) {
-            animation.start(flipVariants.rotateLeft)
-            console.log('animating rotate Left')
-        }
-
-    }, [isFlipped])
+        console.log('State report')
+        console.table([isFront])
+    }, [isFront])
 
     // useEffect(() => {
-    //     setTimeout(() => { setShowFlip(!showFlip) }, 1500)
-    // }, [isFlipped]);
-    //End State Stuff
+    //     if (isFront && isFront !== 'initial') {
+    //         () => control.start('rotateRight')
+    //         console.log('animating rotate Right')
+    //     }
+    //     if (!isFront) {
+    //         () => control.start('rotateLeft')
+    //         console.log('animating rotate Left')
+    //     }
+
+    // }, [isFront])
+
+
 
     return (
         <MotionFlex
             h="500px"
-            w="300px"
-            variants={flipVariants}
-            animate={animation}
+            w="320px"
+            variants={variants}
+            animate={control}
+            initial={false}
             justifyContent="center"
             bg="#EEE"
             minH="200px"
@@ -112,7 +134,10 @@ const VocabCard = ({ content }) => {
                 <Text
                     mt={3}
                 >
-                    {showFlip ? <VocabCardBack content={content} /> : <VocabCardFront content={content} />}
+                    <AnimateSharedLayout type="crossfade">
+                        {isFront ?
+                            <VocabCardFront content={content} layoutId="cardFace" /> : <VocabCardBack content={content} layoutId="cardFace" />}
+                    </AnimateSharedLayout>
                 </Text>
                 <Spacer />
                 <Box>
